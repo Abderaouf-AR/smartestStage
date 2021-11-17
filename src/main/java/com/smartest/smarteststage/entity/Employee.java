@@ -3,22 +3,49 @@ package com.smartest.smarteststage.entity;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
-import java.util.Objects;
 
 @Entity
+@Table(name = "employee")
 public class Employee {
+
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
     private int id;
+
+    @Column(name = "first_name")
     private String firstName;
+
+    @Column(name = "last_name")
     private String lastName;
+
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "phone_number")
     private String phoneNumber;
+
+    @Column(name = "hire_date")
     private Timestamp hireDate;
+
+    @Column(name = "salary")
     private Long salary;
+
+    @Column(name = "comission_pct")
     private Long comissionPct;
-    private Departement departementByDepartementId;
-    private Collection<Jobhistory> jobhistoriesById;
 
+    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinColumn(name = "departement_id")
+    private Departement departement;
 
+    @OneToMany(mappedBy = "employee")
+    private Collection<Job> jobs;
+
+    @OneToMany(mappedBy = "employee")
+    private Collection<JobHistory> jobhistories;
+
+    public Employee() {
+    }
 
     public Employee(String firstName, String lastName, String email, String phoneNumber, Timestamp hireDate, Long salary, Long comissionPct) {
         this.firstName = firstName;
@@ -30,16 +57,6 @@ public class Employee {
         this.comissionPct = comissionPct;
     }
 
-    public Employee() {
-    }
-
-    public Employee(String firstName) {
-        this.firstName = firstName;
-    }
-
-    @Id
-    @GeneratedValue
-    @Column(name = "id")
     public int getId() {
         return id;
     }
@@ -48,8 +65,6 @@ public class Employee {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "first_name")
     public String getFirstName() {
         return firstName;
     }
@@ -58,8 +73,6 @@ public class Employee {
         this.firstName = firstName;
     }
 
-    @Basic
-    @Column(name = "last_name")
     public String getLastName() {
         return lastName;
     }
@@ -68,8 +81,6 @@ public class Employee {
         this.lastName = lastName;
     }
 
-    @Basic
-    @Column(name = "email")
     public String getEmail() {
         return email;
     }
@@ -78,8 +89,6 @@ public class Employee {
         this.email = email;
     }
 
-    @Basic
-    @Column(name = "phone_number")
     public String getPhoneNumber() {
         return phoneNumber;
     }
@@ -88,8 +97,6 @@ public class Employee {
         this.phoneNumber = phoneNumber;
     }
 
-    @Basic
-    @Column(name = "hire_date")
     public Timestamp getHireDate() {
         return hireDate;
     }
@@ -98,8 +105,6 @@ public class Employee {
         this.hireDate = hireDate;
     }
 
-    @Basic
-    @Column(name = "salary")
     public Long getSalary() {
         return salary;
     }
@@ -108,8 +113,6 @@ public class Employee {
         this.salary = salary;
     }
 
-    @Basic
-    @Column(name = "comission_pct")
     public Long getComissionPct() {
         return comissionPct;
     }
@@ -118,37 +121,20 @@ public class Employee {
         this.comissionPct = comissionPct;
     }
 
-
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Employee employee = (Employee) o;
-//        return id == employee.id && Objects.equals(firstName, employee.firstName) && Objects.equals(lastName, employee.lastName) && Objects.equals(email, employee.email) && Objects.equals(phoneNumber, employee.phoneNumber) && Objects.equals(hireDate, employee.hireDate) && Objects.equals(salary, employee.salary) && Objects.equals(comissionPct, employee.comissionPct) && Objects.equals(departementId, employee.departementId);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id, firstName, lastName, email, phoneNumber, hireDate, salary, comissionPct, departementId);
-//    }
-
-    @ManyToOne
-    @JoinColumn(name = "departement_id", referencedColumnName = "id")
-    public Departement getDepartementByDepartementId() {
-        return departementByDepartementId;
+    public Departement getDepartement() {
+        return departement;
     }
 
-    public void setDepartementByDepartementId(Departement departementByDepartementId) {
-        this.departementByDepartementId = departementByDepartementId;
+    public void setDepartement(Departement departement) {
+        this.departement = departement;
     }
 
-    @OneToMany(mappedBy = "employeeByEmployeeId",fetch = FetchType.EAGER)
-    public Collection<Jobhistory> getJobhistoriesById() {
-        return jobhistoriesById;
+    public Collection<JobHistory> getJobhistories() {
+        return jobhistories;
     }
 
-    public void setJobhistoriesById(Collection<Jobhistory> jobhistoriesById) {
-        this.jobhistoriesById = jobhistoriesById;
+    public void setJobhistories(Collection<JobHistory> jobhistories) {
+        this.jobhistories = jobhistories;
     }
 
     @Override
@@ -162,8 +148,8 @@ public class Employee {
                 ", hireDate=" + hireDate +
                 ", salary=" + salary +
                 ", comissionPct=" + comissionPct +
-                ", departementByDepartementId=" + departementByDepartementId +
-                ", jobhistoriesById=" + jobhistoriesById +
+                ", departement=" + departement +
+                ", jobhistories=" + jobhistories +
                 '}';
     }
 }

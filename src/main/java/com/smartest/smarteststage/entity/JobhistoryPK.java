@@ -1,82 +1,73 @@
 package com.smartest.smarteststage.entity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Id;
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Objects;
 
-public class JobhistoryPK implements Serializable {
-    private Timestamp startDate;
-    private Timestamp endDate;
-    private Departement departementByDepartementId;
-    private Job jobByJobId;
-    private Employee employeeByEmployeeId;
-
-    @Basic
-    @Column(name = "start_date")
-    public Timestamp getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Timestamp startDate) {
-        this.startDate = startDate;
-    }
-
-    @Basic
-    @Column(name = "end_date")
-    public Timestamp getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Timestamp endDate) {
-        this.endDate = endDate;
-    }
-
-
-
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Jobhistory that = (Jobhistory) o;
-//        return departementId == that.departementId && jobId == that.jobId && employeeId == that.employeeId && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(startDate, endDate, departementId, jobId, employeeId);
-//    }
+public class JobHistoryPK implements Serializable {
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "departement_id", referencedColumnName = "id", nullable = false)
-    public Departement getDepartementByDepartementId() {
-        return departementByDepartementId;
-    }
-
-    public void setDepartementByDepartementId(Departement departementByDepartementId) {
-        this.departementByDepartementId = departementByDepartementId;
-    }
+    @Column(name = "departement_id")
+    private int departement;
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "job_id", referencedColumnName = "id", nullable = false)
-    public Job getJobByJobId() {
-        return jobByJobId;
-    }
-
-    public void setJobByJobId(Job jobByJobId) {
-        this.jobByJobId = jobByJobId;
-    }
+    @Column(name = "job_id")
+    private int job;
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "employee_id", referencedColumnName = "id", nullable = false)
-    public Employee getEmployeeByEmployeeId() {
-        return employeeByEmployeeId;
+    @Column(name = "employee_id")
+    private int employee;
+
+    public JobHistoryPK(int departement, int job, int employee) {
+        this.departement = departement;
+        this.job = job;
+        this.employee = employee;
     }
 
-    public void setEmployeeByEmployeeId(Employee employeeByEmployeeId) {
-        this.employeeByEmployeeId = employeeByEmployeeId;
+    public int getDepartement() {
+        return departement;
+    }
+
+    public void setDepartement(int departement) {
+        this.departement = departement;
+    }
+
+    public int getJob() {
+        return job;
+    }
+
+    public void setJob(int job) {
+        this.job = job;
+    }
+
+    public int getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(int employee) {
+        this.employee = employee;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        JobHistoryPK that = (JobHistoryPK) o;
+        return departement == that.departement && job == that.job && employee == that.employee;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(departement, job, employee);
+    }
+
+    @Override
+    public String toString() {
+        return "JobHistoryPK{" +
+                "departement=" + departement +
+                ", job=" + job +
+                ", employee=" + employee +
+                '}';
     }
 }

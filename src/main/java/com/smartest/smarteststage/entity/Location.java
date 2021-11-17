@@ -5,18 +5,43 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
+@Table(name = "location")
 public class Location {
-    private int id;
-    private String streetAddress;
-    private String postalCode;
-    private String city;
-    private String stateProvince;
-    private Collection<Departement> departementsById;
-    private Country countryByCountryId;
 
     @Id
     @GeneratedValue
     @Column(name = "id")
+    private int id;
+
+    @Column(name = "street_address")
+    private String streetAddress;
+
+    @Column(name = "postal_code")
+    private String postalCode;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "state_province")
+    private String stateProvince;
+
+    @OneToMany(mappedBy = "location")
+    private Collection<Departement> departements;
+
+    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinColumn(name = "country_id")
+    private Country country;
+
+    public Location() {
+    }
+
+    public Location(String streetAddress, String postalCode, String city, String stateProvince) {
+        this.streetAddress = streetAddress;
+        this.postalCode = postalCode;
+        this.city = city;
+        this.stateProvince = stateProvince;
+    }
+
     public int getId() {
         return id;
     }
@@ -25,8 +50,6 @@ public class Location {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "street_address")
     public String getStreetAddress() {
         return streetAddress;
     }
@@ -35,8 +58,6 @@ public class Location {
         this.streetAddress = streetAddress;
     }
 
-    @Basic
-    @Column(name = "postal_code")
     public String getPostalCode() {
         return postalCode;
     }
@@ -45,8 +66,6 @@ public class Location {
         this.postalCode = postalCode;
     }
 
-    @Basic
-    @Column(name = "city")
     public String getCity() {
         return city;
     }
@@ -55,8 +74,6 @@ public class Location {
         this.city = city;
     }
 
-    @Basic
-    @Column(name = "state_province")
     public String getStateProvince() {
         return stateProvince;
     }
@@ -65,37 +82,32 @@ public class Location {
         this.stateProvince = stateProvince;
     }
 
-
-
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Location location = (Location) o;
-//        return id == location.id && countryId == location.countryId && Objects.equals(streetAddress, location.streetAddress) && Objects.equals(postalCode, location.postalCode) && Objects.equals(city, location.city) && Objects.equals(stateProvince, location.stateProvince);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id, streetAddress, postalCode, city, stateProvince, countryId);
-//    }
-
-    @OneToMany(mappedBy = "locationByLocationId")
-    public Collection<Departement> getDepartementsById() {
-        return departementsById;
+    public Collection<Departement> getDepartements() {
+        return departements;
     }
 
-    public void setDepartementsById(Collection<Departement> departementsById) {
-        this.departementsById = departementsById;
+    public void setDepartements(Collection<Departement> departements) {
+        this.departements = departements;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "country_id", referencedColumnName = "id", nullable = false)
-    public Country getCountryByCountryId() {
-        return countryByCountryId;
+    public Country getCountry() {
+        return country;
     }
 
-    public void setCountryByCountryId(Country countryByCountryId) {
-        this.countryByCountryId = countryByCountryId;
+    public void setCountry(Country country) {
+        this.country = country;
+    }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "id=" + id +
+                ", streetAddress='" + streetAddress + '\'' +
+                ", postalCode='" + postalCode + '\'' +
+                ", city='" + city + '\'' +
+                ", stateProvince='" + stateProvince + '\'' +
+                ", departements=" + departements +
+                ", country=" + country +
+                '}';
     }
 }

@@ -5,17 +5,47 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
+@Table(name = "job")
 public class Job {
-    private int id;
-    private String jobTitle;
-    private Long minSalary;
-    private Long maxSalary;
-    private Collection<JobHasTask> jobHasTasksById;
-    private Collection<Jobhistory> jobhistoriesById;
 
     @Id
     @GeneratedValue
     @Column(name = "id")
+    private int id;
+
+    @Column(name = "job_title")
+    private String jobTitle;
+
+    @Column(name = "min_salary")
+    private Long minSalary;
+
+    @Column(name = "max_salary")
+    private Long maxSalary;
+
+    @ManyToMany
+    @JoinTable(
+            name = "job_task",
+            joinColumns = @JoinColumn(name = "job_id"),
+            inverseJoinColumns = @JoinColumn(name = "task_id")
+    )
+    private Collection<Task> Tasks;
+
+    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
+
+    @OneToMany(mappedBy = "job")
+    private Collection<JobHistory> jobHistories;
+
+    public Job() {
+    }
+
+    public Job(String jobTitle, Long minSalary, Long maxSalary) {
+        this.jobTitle = jobTitle;
+        this.minSalary = minSalary;
+        this.maxSalary = maxSalary;
+    }
+
     public int getId() {
         return id;
     }
@@ -24,8 +54,6 @@ public class Job {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "job_title")
     public String getJobTitle() {
         return jobTitle;
     }
@@ -34,8 +62,6 @@ public class Job {
         this.jobTitle = jobTitle;
     }
 
-    @Basic
-    @Column(name = "min_salary")
     public Long getMinSalary() {
         return minSalary;
     }
@@ -44,8 +70,6 @@ public class Job {
         this.minSalary = minSalary;
     }
 
-    @Basic
-    @Column(name = "max_salary")
     public Long getMaxSalary() {
         return maxSalary;
     }
@@ -54,34 +78,31 @@ public class Job {
         this.maxSalary = maxSalary;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Job job = (Job) o;
-        return id == job.id && Objects.equals(jobTitle, job.jobTitle) && Objects.equals(minSalary, job.minSalary) && Objects.equals(maxSalary, job.maxSalary);
+    public Collection<Task> getTasks() {
+        return Tasks;
+    }
+
+    public void setTasks(Collection<Task> tasks) {
+        Tasks = tasks;
+    }
+
+    public Collection<JobHistory> getJobHistories() {
+        return jobHistories;
+    }
+
+    public void setJobHistories(Collection<JobHistory> jobHistories) {
+        this.jobHistories = jobHistories;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, jobTitle, minSalary, maxSalary);
-    }
-
-    @OneToMany(mappedBy = "jobByJobId")
-    public Collection<JobHasTask> getJobHasTasksById() {
-        return jobHasTasksById;
-    }
-
-    public void setJobHasTasksById(Collection<JobHasTask> jobHasTasksById) {
-        this.jobHasTasksById = jobHasTasksById;
-    }
-
-    @OneToMany(mappedBy = "jobByJobId")
-    public Collection<Jobhistory> getJobhistoriesById() {
-        return jobhistoriesById;
-    }
-
-    public void setJobhistoriesById(Collection<Jobhistory> jobhistoriesById) {
-        this.jobhistoriesById = jobhistoriesById;
+    public String toString() {
+        return "Job{" +
+                "id=" + id +
+                ", jobTitle='" + jobTitle + '\'' +
+                ", minSalary=" + minSalary +
+                ", maxSalary=" + maxSalary +
+                ", Tasks=" + Tasks +
+                ", jobHistories=" + jobHistories +
+                '}';
     }
 }

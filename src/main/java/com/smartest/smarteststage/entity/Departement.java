@@ -5,16 +5,35 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
+@Table(name = "departement")
 public class Departement {
-    private int id;
-    private String departement;
-    private Location locationByLocationId;
-    private Collection<Employee> employeesById;
-    private Collection<Jobhistory> jobhistoriesById;
 
     @Id
     @GeneratedValue
     @Column(name = "id")
+    private int id;
+
+    @Column(name = "departement")
+    private String departement;
+
+    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinColumn(name = "location_id")
+    private Location location;
+
+
+    @OneToMany(mappedBy = "departement")
+    private Collection<Employee> employees;
+
+    @OneToMany(mappedBy = "departement")
+    private Collection<JobHistory> jobhistories;
+
+    public Departement() {
+    }
+
+    public Departement(String departement) {
+        this.departement = departement;
+    }
+
     public int getId() {
         return id;
     }
@@ -23,8 +42,6 @@ public class Departement {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "departement")
     public String getDepartement() {
         return departement;
     }
@@ -33,44 +50,38 @@ public class Departement {
         this.departement = departement;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Departement that = (Departement) o;
-//        return id == that.id && locationId == that.locationId && Objects.equals(departement, that.departement);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id, departement, locationId);
-//    }
-
-    @ManyToOne
-    @JoinColumn(name = "location_id", referencedColumnName = "id", nullable = false)
-    public Location getLocationByLocationId() {
-        return locationByLocationId;
+    public Location getLocation() {
+        return location;
     }
 
-    public void setLocationByLocationId(Location locationByLocationId) {
-        this.locationByLocationId = locationByLocationId;
+    public void setLocation(Location location) {
+        this.location = location;
     }
 
-    @OneToMany(mappedBy = "departementByDepartementId")
-    public Collection<Employee> getEmployeesById() {
-        return employeesById;
+    public Collection<Employee> getEmployees() {
+        return employees;
     }
 
-    public void setEmployeesById(Collection<Employee> employeesById) {
-        this.employeesById = employeesById;
+    public void setEmployees(Collection<Employee> employees) {
+        this.employees = employees;
     }
 
-    @OneToMany(mappedBy = "departementByDepartementId")
-    public Collection<Jobhistory> getJobhistoriesById() {
-        return jobhistoriesById;
+    public Collection<JobHistory> getJobhistories() {
+        return jobhistories;
     }
 
-    public void setJobhistoriesById(Collection<Jobhistory> jobhistoriesById) {
-        this.jobhistoriesById = jobhistoriesById;
+    public void setJobhistories(Collection<JobHistory> jobhistories) {
+        this.jobhistories = jobhistories;
+    }
+
+    @Override
+    public String toString() {
+        return "Departement{" +
+                "id=" + id +
+                ", departement='" + departement + '\'' +
+                ", location=" + location +
+                ", employees=" + employees +
+                ", jobhistories=" + jobhistories +
+                '}';
     }
 }

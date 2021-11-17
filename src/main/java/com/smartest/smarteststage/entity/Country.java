@@ -5,15 +5,31 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
+@Table(name = "Country")
 public class Country {
-    private int id;
-    private String countryName;
-    private Region regionByRegionId;
-    private Collection<Location> locationsById;
 
     @Id
     @GeneratedValue
     @Column(name = "id")
+    private int id;
+
+    @Column(name = "country_name")
+    private String countryName;
+
+    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinColumn(name = "region_id")
+    private Region region;
+
+    @OneToMany(mappedBy = "country")
+    private Collection<Location> locations;
+
+    public Country() {
+    }
+
+    public Country(String countryName) {
+        this.countryName = countryName;
+    }
+
     public int getId() {
         return id;
     }
@@ -22,8 +38,6 @@ public class Country {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "country_name")
     public String getCountryName() {
         return countryName;
     }
@@ -32,35 +46,29 @@ public class Country {
         this.countryName = countryName;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Country country = (Country) o;
-//        return id == country.id && regionId == country.regionId && Objects.equals(countryName, country.countryName);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id, countryName, regionId);
-//    }
-
-    @ManyToOne
-    @JoinColumn(name = "region_id", referencedColumnName = "id", nullable = false)
-    public Region getRegionByRegionId() {
-        return regionByRegionId;
+    public Region getRegion() {
+        return region;
     }
 
-    public void setRegionByRegionId(Region regionByRegionId) {
-        this.regionByRegionId = regionByRegionId;
+    public void setRegion(Region region) {
+        this.region = region;
     }
 
-    @OneToMany(mappedBy = "countryByCountryId")
-    public Collection<Location> getLocationsById() {
-        return locationsById;
+    public Collection<Location> getLocations() {
+        return locations;
     }
 
-    public void setLocationsById(Collection<Location> locationsById) {
-        this.locationsById = locationsById;
+    public void setLocations(Collection<Location> locations) {
+        this.locations = locations;
+    }
+
+    @Override
+    public String toString() {
+        return "Country{" +
+                "id=" + id +
+                ", countryName='" + countryName + '\'' +
+                ", region=" + region +
+                ", locations=" + locations +
+                '}';
     }
 }

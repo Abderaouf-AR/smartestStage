@@ -5,15 +5,37 @@ import java.util.Collection;
 import java.util.Objects;
 
 @Entity
+@Table(name = "task")
 public class Task {
-    private int id;
-    private String title;
-    private String description;
-    private Collection<JobHasTask> jobHasTasksById;
 
     @Id
     @GeneratedValue
     @Column(name = "id")
+    private int id;
+
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "description")
+    private String description;
+
+    @ManyToMany
+    @JoinTable(
+            name = "job_task",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "job_id")
+    )
+    private Collection<Job> jobs;
+
+    public Task() {
+    }
+
+    public Task(int id, String title, String description) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+    }
+
     public int getId() {
         return id;
     }
@@ -22,8 +44,6 @@ public class Task {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "title")
     public String getTitle() {
         return title;
     }
@@ -32,8 +52,6 @@ public class Task {
         this.title = title;
     }
 
-    @Basic
-    @Column(name = "description")
     public String getDescription() {
         return description;
     }
@@ -42,25 +60,21 @@ public class Task {
         this.description = description;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Task task = (Task) o;
-        return id == task.id && Objects.equals(title, task.title) && Objects.equals(description, task.description);
+    public Collection<Job> getJobs() {
+        return jobs;
+    }
+
+    public void setJobs(Collection<Job> jobs) {
+        this.jobs = jobs;
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, title, description);
-    }
-
-    @OneToMany(mappedBy = "taskByTaskId")
-    public Collection<JobHasTask> getJobHasTasksById() {
-        return jobHasTasksById;
-    }
-
-    public void setJobHasTasksById(Collection<JobHasTask> jobHasTasksById) {
-        this.jobHasTasksById = jobHasTasksById;
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", jobs=" + jobs +
+                '}';
     }
 }

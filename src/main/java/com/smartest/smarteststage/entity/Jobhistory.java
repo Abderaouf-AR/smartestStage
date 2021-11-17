@@ -1,20 +1,43 @@
 package com.smartest.smarteststage.entity;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Objects;
 
 @Entity
-@IdClass(JobhistoryPK.class)
-public class Jobhistory {
-    private Timestamp startDate;
-    private Timestamp endDate;
-    private Departement departementByDepartementId;
-    private Job jobByJobId;
-    private Employee employeeByEmployeeId;
+@IdClass(JobHistoryPK.class)
+@Table(name = "jobhistory")
+public class JobHistory implements Serializable {
 
-    @Basic
     @Column(name = "start_date")
+    private Timestamp startDate;
+
+    @Column(name = "end_date")
+    private Timestamp endDate;
+
+    @Id
+    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinColumn(name = "departement_id")
+    private Departement departement;
+
+    @Id
+    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinColumn(name = "job_id")
+    private Job job;
+
+    @Id
+    @ManyToOne(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH})
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
+
+    public JobHistory() {
+    }
+
+    public JobHistory(Timestamp startDate, Timestamp endDate) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
     public Timestamp getStartDate() {
         return startDate;
     }
@@ -23,8 +46,6 @@ public class Jobhistory {
         this.startDate = startDate;
     }
 
-    @Basic
-    @Column(name = "end_date")
     public Timestamp getEndDate() {
         return endDate;
     }
@@ -33,51 +54,38 @@ public class Jobhistory {
         this.endDate = endDate;
     }
 
-
-
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        Jobhistory that = (Jobhistory) o;
-//        return departementId == that.departementId && jobId == that.jobId && employeeId == that.employeeId && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(startDate, endDate, departementId, jobId, employeeId);
-//    }
-
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "departement_id", referencedColumnName = "id", nullable = false)
-    public Departement getDepartementByDepartementId() {
-        return departementByDepartementId;
+    public Departement getDepartement() {
+        return departement;
     }
 
-    public void setDepartementByDepartementId(Departement departementByDepartementId) {
-        this.departementByDepartementId = departementByDepartementId;
+    public void setDepartement(Departement departement) {
+        this.departement = departement;
     }
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "job_id", referencedColumnName = "id", nullable = false)
-    public Job getJobByJobId() {
-        return jobByJobId;
+    public Job getJob() {
+        return job;
     }
 
-    public void setJobByJobId(Job jobByJobId) {
-        this.jobByJobId = jobByJobId;
+    public void setJob(Job job) {
+        this.job = job;
     }
 
-    @Id
-    @ManyToOne
-    @JoinColumn(name = "employee_id", referencedColumnName = "id", nullable = false)
-    public Employee getEmployeeByEmployeeId() {
-        return employeeByEmployeeId;
+    public Employee getEmployee() {
+        return employee;
     }
 
-    public void setEmployeeByEmployeeId(Employee employeeByEmployeeId) {
-        this.employeeByEmployeeId = employeeByEmployeeId;
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    @Override
+    public String toString() {
+        return "JobHistory{" +
+                "startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", departement=" + departement +
+                ", job=" + job +
+                ", employee=" + employee +
+                '}';
     }
 }
