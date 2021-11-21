@@ -1,10 +1,17 @@
 package com.smartest.smarteststage.entity;
 
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.Objects;
 
+@Setter
+@Getter
+@NoArgsConstructor
+@ToString
 @Entity
+@AllArgsConstructor
 @Table(name = "Country")
 public class Country {
 
@@ -22,53 +29,4 @@ public class Country {
 
     @OneToMany(mappedBy = "country")
     private Collection<Location> locations;
-
-    public Country() {
-    }
-
-    public Country(String countryName) {
-        this.countryName = countryName;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getCountryName() {
-        return countryName;
-    }
-
-    public void setCountryName(String countryName) {
-        this.countryName = countryName;
-    }
-
-    public Region getRegion() {
-        return region;
-    }
-
-    public void setRegion(Region region) {
-        this.region = region;
-    }
-
-    public Collection<Location> getLocations() {
-        return locations;
-    }
-
-    public void setLocations(Collection<Location> locations) {
-        this.locations = locations;
-    }
-
-    @Override
-    public String toString() {
-        return "Country{" +
-                "id=" + id +
-                ", countryName='" + countryName + '\'' +
-                ", region=" + region +
-                ", locations=" + locations +
-                '}';
-    }
 }
